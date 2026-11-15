@@ -89,7 +89,7 @@ local function initType(name)
     local settings = Kora.state.awaitGlobal(name .. 'Data', 30000, 100)
     local spots = Kora.state.awaitGlobal(name, 30000, 100)
     if not settings or not spots then
-        print(('[kora_drugs] timed out waiting for GlobalState.%s'):format(name))
+        Kora.logging.warn('plants.state_timed_out', 'Timed out waiting for plant spawn state', { state = name })
         return
     end
     Settings[name], Spots[name] = settings, spots
@@ -110,7 +110,7 @@ end)
 CreateThread(function()
     local types = Kora.state.awaitGlobal('drugPlantTypes', 30000, 100)
     if not types then
-        print('[kora_drugs] timed out waiting for GlobalState.drugPlantTypes')
+        Kora.logging.warn('plants.types_timed_out', 'Timed out waiting for GlobalState.drugPlantTypes')
         return
     end
     for _, name in ipairs(types) do

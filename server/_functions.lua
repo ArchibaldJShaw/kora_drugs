@@ -66,9 +66,9 @@ function onCooldown(src, key)
     if active then
         blocked[key] = blocked[key] or {}
         blocked[key][src] = (blocked[key][src] or 0) + 1
-        Kora.print.warn(('[kora_drugs] player %s hit the "%s" cooldown %d time(s)'):format(src, key, blocked[key][src]))
+        Kora.logging.warn('cooldown.blocked', 'Player was stopped by a cooldown', { playerId = src, cooldown = key, count = blocked[key][src] })
         if blocked[key][src] == 5 then
-            Kora.print.error(('[kora_drugs] player %s hit the "%s" cooldown 5 times, consider taking action'):format(src, key))
+            Kora.logging.error('cooldown.repeated_abuse', 'Player hit a cooldown 5 times, consider taking action', { playerId = src, cooldown = key })
             DropPlayer(src, 'You have hit the "' .. key .. '" cooldown 5 times.')
         end
     end
@@ -209,6 +209,6 @@ local reports, schemaError = Kora.sql.ensureTables(KoraDrugsSchema)
 assert(reports ~= nil, schemaError or 'kora_drugs: could not create storage')
 for _, report in ipairs(reports) do
     for _, warning in ipairs(report.warnings or {}) do
-        Kora.print.warn(('[kora_drugs] %s: %s'):format(tostring(report.table), tostring(warning)))
+        Kora.logging.warn('schema.warning', 'Schema warning', { table = tostring(report.table), warning = tostring(warning) })
     end
 end
