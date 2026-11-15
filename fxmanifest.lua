@@ -16,7 +16,6 @@ shared_scripts {
     '@kora_core/init.lua',
     'shared/config.lua',
     'shared/constants.lua',
-    'shared/legacy_dealers.lua',
     'shared/recipes.lua',
     'shared/steps.lua'
 }
