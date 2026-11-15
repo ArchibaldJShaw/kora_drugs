@@ -46,7 +46,7 @@ end)
 CreateThread(function()
     local all = Kora.state.awaitGlobal('Drugs', 30000, 100)
     if not all then
-        print('[kora_drugs] timed out waiting for GlobalState.Drugs')
+        Kora.logging.warn('drugs.state_timed_out', 'Timed out waiting for GlobalState.Drugs')
         return
     end
     Drugs = all

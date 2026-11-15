@@ -1083,7 +1083,7 @@ local function seedEvent(step, kind)
     end
 
     if not ok then error(err or 'the write failed') end
-    Kora.print.warn(('[kora_drugs] %s %s'):format(what, step))
+    Kora.logging.info('creator.event_row_changed', 'Creator changed an event row', { change = what, step = step })
     ReloadEvents(step)
 end
 
@@ -1135,7 +1135,7 @@ CreateThread(function()
     for step, kind in pairs(eventTypes) do
         if not removed[step] then
             local ok, err = pcall(seedEvent, step, kind)
-            if not ok then Kora.print.warn(('[kora_drugs] could not set up %s: %s'):format(step, tostring(err))) end
+            if not ok then Kora.logging.error('creator.event_setup_failed', 'Could not set up an event', { step = step, error = tostring(err) }) end
         end
     end
 end)
@@ -1169,7 +1169,7 @@ end)
 
 RegisterCommand('drugCreator', function(source)
     if not isAdmin(source) then
-        Kora.print.warn(('[kora_drugs] player %s was denied /drugCreator: they do not have the "%s" ace'):format(source, 'command'))
+        Kora.logging.warn('creator.command_denied', 'Player was denied /drugCreator: missing "command" ace', { playerId = source })
         Kora.notify.send(source, { title = 'Drug Creator', message = 'Admin permission required.', type = 'error' })
         return
     end

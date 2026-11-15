@@ -18,12 +18,12 @@ RegisterNetEvent('kora_drugs:server:craft', function(drug, step, key)
     local location = savedLocation(entry, key)
     if not (location and location.coords) then return end
     if not isNear(src, location.coords) then
-        Kora.print.warn(('%s tried %s from too far away'):format(src, name))
+        Kora.logging.warn('craft.too_far_away', 'Player tried to craft from too far away', { playerId = src, step = name })
         return
     end
 
     if onCooldown(src, 'craft') then
-        Kora.print.warn(Kora.lang('Functions.timeout', src, name))
+        Kora.logging.warn('craft.on_cooldown', 'Player tried to craft while on cooldown', { playerId = src, step = name })
         return
     end
     startCooldown(src, 'craft', craftCooldown)
